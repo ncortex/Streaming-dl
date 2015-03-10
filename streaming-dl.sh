@@ -19,7 +19,7 @@ function amv
 	method_free=$(cat temp_page | grep '<input type="hidden" name="method_free" value="' | cut -d "\"" -f6)
 	
 	#Download de page WITH the post variables, and get the video url
-	wget --post-data "op=$op&usr_login=$usr_login&id=$id&fname=$fname&referer=$referer&url=$url&method_free=$method_free" $url -O page
+	wget -q --post-data "op=$op&usr_login=$usr_login&id=$id&fname=$fname&referer=$referer&url=$url&method_free=$method_free" $url -O page
 	
 	furl=$(cat page | grep '"file" : "' | cut -d "\"" -f4)
 	
@@ -43,7 +43,7 @@ function pt
 	hash=$(cat temp_page | grep '<input type="hidden" name="hash" value="' | cut -d "\"" -f6)
 	
 	#Download de page WITH the post variables, and get the video url
-	wget --post-data "op=$op&usr_login=$usr_login&id=$id&fname=$fname&referer=$referer&url=$url&hash=$hash" $url -O page
+	wget -q --post-data "op=$op&usr_login=$usr_login&id=$id&fname=$fname&referer=$referer&url=$url&hash=$hash" $url -O page
 	
 	furl=$(cat page | grep 'file: "' | cut -d "\"" -f2)
 	
@@ -70,7 +70,7 @@ function sc
 	sleep 12
 	
 	#Download de page WITH the post variables, and get the video url
-	wget --post-data "op=$op&usr_login=$usr_login&id=$id&fname=$fname&referer=$referer&url=$url&method_free=$hash" $url -O page
+	wget -q --post-data "op=$op&usr_login=$usr_login&id=$id&fname=$fname&referer=$referer&url=$url&method_free=$hash" $url -O page
 	
 	furl=$(cat page | grep 'file: "' | cut -d "\"" -f2)
 	
