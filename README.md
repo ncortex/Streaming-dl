@@ -1,5 +1,5 @@
 # Streaming-dl
-Download videos from CLI. AllMyVideos, VidSpot, Played.to and StreamCloud supported
+Download videos from CLI. AllMyVideos, VidSpot, Played.to, Powvideo(ffmpeg required) and StreamCloud supported
 
 ## Usage:
 
