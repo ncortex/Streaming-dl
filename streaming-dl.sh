@@ -25,7 +25,7 @@ function amv
 	furl=$(cat page | grep '"file" : "http://' | cut -d "\"" -f4)
 	
 	#Clean and download the video :D
-	#rm page temp_page 
+	rm page temp_page 
 	
 	curl -L -O -C - -# $furl > "$fname"
 
@@ -113,14 +113,41 @@ wget $url -q -O temp_page
 	rm page temp_page
 }
 
+function fh		
+{
+	#Save the variables POST
+	wget -q $url -q -O temp_page
+	
+	op=$(cat temp_page | grep '<input type="hidden" name="op" value="d' | cut -d "\"" -f6)
+	usr_login=$(cat temp_page | grep '<input type="hidden" name="usr_login" value="' | cut -d "\"" -f6)
+	id=$(cat temp_page | grep '<input type="hidden" name="id" value="' | cut -d "\"" -f6)
+	fname=$(cat temp_page | grep '<input type="hidden" name="fname" value="' | cut -d "\"" -f6)
+	referer=$(cat temp_page | grep '<input type="hidden" name="referer" value="' | cut -d "\"" -f6)
+	method_free=$(cat temp_page | grep '<input id="plans_free_button_text" type="submit" class="btn btn-success btn-lg" name="method_free" value="' | cut -d "\"" -f10)
+	
+	echo -e "\033[1;32mDescargando \033[0;34m $id \033[1;36m $fname : \033[1;0m"
+	#Download de page WITH the post variables, and get the video url
+
+	wget -q --post-data "op=$op&usr_login=$usr_login&id=$id&fname=$fname&referer=$referer&url=$url&method_free=$method_free" $url -O page
+	
+	furl=$(cat page | egrep 'file: "http://[^"]+",' -m1 | cut -d "\"" -f2)
+
+	#Clean and download the video :D
+	rm page temp_page 
+	
+	curl -L -C - -# $furl > "$fname"
+
+}
+
 for url in $@ 
 do
-	server=$(echo $url | egrep '(allmyvideos|vidspot|streamcloud|played|powvideo)' -o)
+	server=$(echo $url | egrep '(allmyvideos|vidspot|streamcloud|played|powvideo|filehoot)' -o)
 	case $server in
 		"allmyvideos" ) amv $url ;;
 		"vidspot" ) amv $url ;;
 		"streamcloud" ) sc $url ;;
 		"played" ) pt $url ;;
 		"powvideo" ) pv $url ;;
+		"filehoot" ) fh $url ;;
 	esac
 done
